@@ -1,3 +1,8 @@
+:root {
+  --cat-size: 50px;
+}
+
+/* 全体レイアウト */
 body {
   font-family: "Arial", sans-serif;
   margin: 0;
@@ -5,11 +10,14 @@ body {
   background: #fffaf5;
   color: #333;
   text-align: center;
+  overflow: hidden; /* 背景の猫がはみ出さないように */
 }
 
 header {
   background: #ffcf9f;
   padding: 1rem;
+  position: relative;
+  z-index: 10;
 }
 
 header h1 {
@@ -22,21 +30,29 @@ nav a {
   text-decoration: none;
 }
 
+/* 背景猫 */
+#cat-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.cat {
+  position: absolute;
+  width: var(--cat-size);
+  height: auto;
+  pointer-events: auto;
+  user-select: none;
+  left: 0;
+}
+
+/* ボタン */
+.button,
 button {
-  background: #ff9f9f;
-  border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-button:hover {
-  background: #ff7f7f;
-}
-
-.button {
   display: inline-block;
   background: #ff9f9f;
   color: white;
@@ -45,9 +61,26 @@ button:hover {
   text-decoration: none;
   font-size: 1rem;
   cursor: pointer;
+  border: none;
 }
 
-.button:hover {
+.button:hover,
+button:hover {
   background: #ff7f7f;
 }
 
+/* フッター */
+footer {
+  text-align: center;
+  padding: 1rem;
+  color: #555;
+  position: relative;
+  z-index: 10;
+}
+
+main {
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+}

@@ -7,82 +7,6 @@ import "../styles/global.css";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>猫タスク管理アプリ | 猫の手も借りたい</title>
-    <style>
-      :root {
-        --cat-size: 30px; /* 猫の大きさを小さく */
-      }
-
-      body {
-        margin: 0;
-        overflow: hidden;
-        background: #f0f0f0;
-        font-family: system-ui, sans-serif;
-      }
-
-      #cat-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        z-index: -1;
-      }
-
-      .cat {
-        position: absolute;
-        width: var(--cat-size);
-        height: auto;
-        pointer-events: auto;
-        user-select: none;
-        left: 0; /* 左端スタート */
-      }
-
-      header {
-        background: #ffc999;
-        padding: 1rem;
-        text-align: center;
-      }
-
-      header h1 {
-        margin: 0;
-      }
-
-      nav a {
-        margin: 0 1rem;
-        text-decoration: none;
-        color: #333;
-      }
-
-      main {
-        text-align: center;
-        padding: 2rem;
-        position: relative;
-        z-index: 10;
-      }
-
-      .button {
-        display: inline-block;
-        padding: 0.75rem 1.5rem;
-        background: pink;
-        color: #000;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: bold;
-        transition: background 0.3s;
-      }
-
-      .button:hover {
-        background: hotpink;
-        color: white;
-      }
-
-      footer {
-        text-align: center;
-        padding: 1rem;
-        color: #555;
-      }
-    </style>
   </head>
 
   <body>
@@ -98,11 +22,33 @@ import "../styles/global.css";
     </header>
 
     <main>
-      <h2>かわいい猫と一緒にタスク管理しよう！</h2>
-      <p>NekoTaskは、タスクを完了するたびに猫が増える癒し系タスク管理アプリです。</p>
-      <a href="https://my-app.yinyoo2904.workers.dev/" class="button">
-        アプリを使ってみる
-      </a>
+      <section>
+        <h2>かわいい猫と一緒にタスク管理しよう！</h2>
+        <p>NekoTaskは、タスクを完了するたびに猫が増える癒し系タスク管理アプリです。</p>
+        <a href="https://my-app.yinyoo2904.workers.dev/" class="button">
+          アプリを使ってみる
+        </a>
+      </section>
+
+      <section class="features">
+        <h2>🎁 タスクをこなして猫缶を集めよう！</h2>
+        <p>タスクを1つ完了するごとに、アプリ内通貨の <strong>「猫缶」</strong> がもらえます。</p>
+        <p>猫缶が <strong>100個</strong> 貯まると、ガチャを1回引くことができます！</p>
+        <p>ガチャで手に入れた猫は、あなたの <strong>コレクション</strong> に追加され、いつでも眺めることができます🐈✨</p>
+        <ul>
+          <li>🐾 タスク完了 → 猫缶ゲット</li>
+          <li>🎲 猫缶100個 → ガチャ1回</li>
+          <li>📸 集めた猫は図鑑に登録！</li>
+        </ul>
+      </section>
+
+      <section class="cta">
+        <h2>コレクションを充実させて、自分だけの猫図鑑を作ろう！</h2>
+        <p>頑張れば頑張るほど、かわいい猫たちがあなたの周りに集まります🐱💕</p>
+        <a href="https://my-app.yinyoo2904.workers.dev/" class="button">
+          さっそく始める
+        </a>
+      </section>
     </main>
 
     <footer>
@@ -112,11 +58,11 @@ import "../styles/global.css";
     <audio id="meow" src="/cat35.mp3" preload="auto"></audio>
 
     <script>
-      const NUM_CATS = 30;
+      const NUM_CATS = 50;
       const MIN_DURATION = 6;
       const MAX_DURATION = 18;
-      const CAT_SRC = '/2.png';
-      const CAT_SIZE = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cat-size')) || 30;
+      const CAT_SIZE = 50;
+      const CAT_IMAGES = ['/1.png','/2.png','/3.png','/4.png','/5.png'];
 
       const bg = document.getElementById('cat-bg');
       const sound = document.getElementById('meow');
@@ -133,12 +79,13 @@ import "../styles/global.css";
 
       for (let i = 0; i < NUM_CATS; i++) {
         const el = document.createElement('img');
-        el.src = CAT_SRC;
+        el.src = CAT_IMAGES[Math.floor(Math.random() * CAT_IMAGES.length)];
         el.className = 'cat';
         el.alt = '';
         el.draggable = false;
+        el.style.width = CAT_SIZE + 'px';
+        el.style.height = 'auto';
 
-        // 左端に並べる場合は 0、少しバラけさせたい場合は -i*(CAT_SIZE+10)
         const startX = -i * (CAT_SIZE + 10);
         const top = Math.random() * (height - CAT_SIZE);
         el.style.top = `${top}px`;
@@ -167,15 +114,14 @@ import "../styles/global.css";
 
         cats.forEach(cat => {
           cat.x += cat.speed * dt;
-
           if (cat.x > width + 100) {
-            cat.x = -CAT_SIZE; // 左端に戻す
+            cat.el.src = CAT_IMAGES[Math.floor(Math.random() * CAT_IMAGES.length)];
+            cat.x = -CAT_SIZE;
             cat.top = Math.random() * (height - CAT_SIZE);
             cat.el.style.top = `${cat.top}px`;
             const duration = MIN_DURATION + Math.random() * (MAX_DURATION - MIN_DURATION);
             cat.speed = (width + 200) / duration;
           }
-
           cat.el.style.transform = `translateX(${cat.x}px)`;
         });
 
