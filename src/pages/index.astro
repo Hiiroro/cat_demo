@@ -6,129 +6,62 @@ import "../styles/global.css";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>猫タスク管理アプリ | 猫の手も借りたい</title>
+    <title>猫の手も借りたい</title>
   </head>
-
   <body>
-    <div id="cat-bg"></div>
-
-    <header>
-      <h1>🐾 猫の手も借りたい</h1>
-      <nav>
-        <a href="/">ホーム</a>
-        <a href="/features">機能</a>
-        <a href="/contact">お問い合わせ</a>
-      </nav>
+    <header class="header">
+      <h1>🐾 猫の手も借りたい 🐾</h1>
     </header>
 
-    <main>
-      <section>
-        <h2>かわいい猫と一緒にタスク管理しよう！</h2>
-        <p>NekoTaskは、タスクを完了するたびに猫が増える癒し系タスク管理アプリです。</p>
-        <a href="https://my-app.yinyoo2904.workers.dev/" class="button">
-          アプリを使ってみる
-        </a>
-      </section>
+    <main class="main-content">
+      <h2>かわいい猫と一緒に</h2>
+      <h2>一緒にタスクを管理しよう！</h2>
 
-      <section class="features">
-        <h2>🎁 タスクをこなして猫缶を集めよう！</h2>
-        <p>タスクを1つ完了するごとに、アプリ内通貨の <strong>「猫缶」</strong> がもらえます。</p>
-        <p>猫缶が <strong>100個</strong> 貯まると、ガチャを1回引くことができます！</p>
-        <p>ガチャで手に入れた猫は、あなたの <strong>コレクション</strong> に追加され、いつでも眺めることができます🐈✨</p>
-        <ul>
-          <li>🐾 タスク完了 → 猫缶ゲット</li>
-          <li>🎲 猫缶100個 → ガチャ1回</li>
-          <li>📸 集めた猫は図鑑に登録！</li>
-        </ul>
-      </section>
-
-      <section class="cta">
-        <h2>コレクションを充実させて、自分だけの猫図鑑を作ろう！</h2>
-        <p>頑張れば頑張るほど、かわいい猫たちがあなたの周りに集まります🐱💕</p>
-        <a href="https://my-app.yinyoo2904.workers.dev/" class="button">
-          さっそく始める
+      <div class="paws-grid">
+        <a href="/purpose" class="paw-item">
+          <img src="/paws.png" alt="目的" />
+          <span>このアプリの目的</span>
         </a>
-      </section>
+        <a href="/block" class="paw-item">
+          <img src="/paws.png" alt="ブロック機能" />
+          <span>SNS<br />ブロック機能とは？</span>
+        </a>
+        <a href="/cat_can" class="paw-item">
+          <img src="/paws.png" alt="猫缶とは" />
+          <span>猫缶とは？</span>
+        </a>
+        <a href="/book" class="paw-item">
+          <img src="/paws.png" alt="猫図鑑" />
+          <span>猫図鑑とは？</span>
+        </a>
+
+        <!-- 真ん中の猫画像 -->
+        <div class="cat-center">
+          <img src="/main.png" alt="猫のイラスト" />
+        </div>
+      </div>
+
+      <div class="start-button">
+        <a href="https://my-app.yinyoo2904.workers.dev/" target="_blank">
+          今すぐ始める
+        </a>
+      </div>
     </main>
 
     <footer>
-      <p>© 2025 NekoTask</p>
+      <p>© 2025 猫の手も借りたい</p>
     </footer>
 
-    <audio id="meow" src="/cat35.mp3" preload="auto"></audio>
-
+    <!-- 🐱 音声の追加 -->
+    <audio id="meow-sound" src="/猫の鳴き声1.mp3" preload="auto"></audio>
     <script>
-      const NUM_CATS = 50;
-      const MIN_DURATION = 6;
-      const MAX_DURATION = 18;
-      const CAT_SIZE = 50;
-      const CAT_IMAGES = ['/1.png','/2.png','/3.png','/4.png','/5.png'];
+      const catImage = document.querySelector('.cat-center img');
+      const meowSound = document.getElementById('meow-sound');
 
-      const bg = document.getElementById('cat-bg');
-      const sound = document.getElementById('meow');
-
-      let width = window.innerWidth;
-      let height = window.innerHeight;
-
-      window.addEventListener('resize', () => {
-        width = window.innerWidth;
-        height = window.innerHeight;
+      catImage.addEventListener('mouseenter', () => {
+        meowSound.currentTime = 0;
+        meowSound.play();
       });
-
-      const cats = [];
-
-      for (let i = 0; i < NUM_CATS; i++) {
-        const el = document.createElement('img');
-        el.src = CAT_IMAGES[Math.floor(Math.random() * CAT_IMAGES.length)];
-        el.className = 'cat';
-        el.alt = '';
-        el.draggable = false;
-        el.style.width = CAT_SIZE + 'px';
-        el.style.height = 'auto';
-
-        const startX = -i * (CAT_SIZE + 10);
-        const top = Math.random() * (height - CAT_SIZE);
-        el.style.top = `${top}px`;
-        el.style.left = '0px';
-
-        const duration = MIN_DURATION + Math.random() * (MAX_DURATION - MIN_DURATION);
-        const speed = (width + 200) / duration;
-
-        cats.push({ el, x: startX, speed, top });
-
-        el.addEventListener('click', () => {
-          if (sound) {
-            sound.currentTime = 0;
-            sound.play().catch(() => {});
-          }
-        });
-
-        bg.appendChild(el);
-      }
-
-      let lastTime = performance.now();
-
-      function frame(now) {
-        const dt = (now - lastTime) / 1000;
-        lastTime = now;
-
-        cats.forEach(cat => {
-          cat.x += cat.speed * dt;
-          if (cat.x > width + 100) {
-            cat.el.src = CAT_IMAGES[Math.floor(Math.random() * CAT_IMAGES.length)];
-            cat.x = -CAT_SIZE;
-            cat.top = Math.random() * (height - CAT_SIZE);
-            cat.el.style.top = `${cat.top}px`;
-            const duration = MIN_DURATION + Math.random() * (MAX_DURATION - MIN_DURATION);
-            cat.speed = (width + 200) / duration;
-          }
-          cat.el.style.transform = `translateX(${cat.x}px)`;
-        });
-
-        requestAnimationFrame(frame);
-      }
-
-      requestAnimationFrame(frame);
     </script>
   </body>
 </html>
